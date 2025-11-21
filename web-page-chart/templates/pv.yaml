@@ -1,0 +1,15 @@
+{{- if and .Values.storage.enabled .Values.storage.createPV }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: web-page-pv
+spec:
+  capacity:
+    storage: {{ .Values.storage.size }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .Values.storage.pvReclaimPolicy }}
+  storageClassName: web-page-local
+  hostPath:
+    path: {{ .Values.storage.hostPath }}
+{{- end }}

@@ -1,0 +1,51 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/johno221/web-page
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  port: 80
+
+ingress:
+  enabled: false
+  host: web-page.local
+
+# resources pre pod – rozumné defaulty pre Nginx/HTML
+resources:
+  requests:
+    cpu: "50m"
+    memory: "64Mi"
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+
+# HTTP healthchecky pre web app
+probes:
+  path: /
+  port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+  successThreshold: 1
+
+# Storage – PVC (PV sa pri dynamickom provisioning-u vytvorí automaticky)
+storage:
+  enabled: true
+  size: 1Gi
+  # ak máš storageClass, daj sem jej názov, napr. "standard"
+  storageClassName: ""
+
+  # len na DEV (single-node, hostPath PV) – defaultne false
+  createPV: false
+  hostPath: /tmp/web-page-data
+  pvReclaimPolicy: Delete
+
+# HPA – horizontálne škálovanie podľa CPU
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 60
