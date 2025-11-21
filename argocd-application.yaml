@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: web-page
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/johno221/web-page-gitops.git"
+    targetRevision: main
+    path: web-page-chart
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: web-page
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
