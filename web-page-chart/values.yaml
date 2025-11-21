@@ -33,7 +33,7 @@ probes:
 
 # Storage – PVC (PV sa pri dynamickom provisioning-u vytvorí automaticky)
 storage:
-  enabled: true
+  enabled: false
   size: 1Gi
   # ak máš storageClass, daj sem jej názov, napr. "standard"
   storageClassName: ""
